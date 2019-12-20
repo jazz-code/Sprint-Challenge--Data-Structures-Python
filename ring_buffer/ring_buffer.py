@@ -1,32 +1,44 @@
 from doubly_linked_list import DoublyLinkedList
 
-# class RingBuffer:
-#     def __init__(self, capacity):
-#         self.capacity = capacity
-#         self.current = None
-#         self.storage = DoublyLinkedList()
-#         self.data = []
+class RingBuffer:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.current = None
+        self.storage = DoublyLinkedList()
 
-#     def append(self, item):
-#         # pass
-#         # when capacity is full append last element
-#         if self.data.length == self.capacity:
-#             # print("item",item)
-#             # self.storage.add_to_head(item)
-#             self.current = 0
-#             self.storage[self.current] = item
-#             self.current = (self.current + 1) % self.capacity
-#         else:
-#             self.storage.add_to_head(item)
+    def append(self, item):
+        # current = self.current
+        storage = self.storage
+        # when capacity is full append last element
+        if storage.length is None:
+            # print("item",item)
+            storage.add_to_head(item)
+            self.current = storage.head
+        elif storage.length < self.capacity:
+            # print("item add",item)
+            storage.add_to_tail(item)
+            self.current = storage.tail
+        elif self.current is storage.tail:
+            storage.remove_from_head()
+            # print("item",item)
+            storage.add_to_head(item)
+            self.current = storage.head
+        else:
+            self.current.insert_after(item)
+            storage.length += 1
+            self.current = self.current.next
+            storage.delete(self.current.next)
 
+    def get(self):
+        # Note:  This is the only [] allowed
+        list_buffer_contents = []
 
-#     def get(self):
-#         # Note:  This is the only [] allowed
-#         list_buffer_contents = []
+        current = self.storage.head
+        while current is not None:
+            list_buffer_contents.append(current.value)
+            current = current.next
+        return list_buffer_contents
 
-#         # if self.storage is not None:
-#             # print(self.storage.head.value)
-#         return list_buffer_contents
 
 # ----------------Stretch Goal-------------------
 
